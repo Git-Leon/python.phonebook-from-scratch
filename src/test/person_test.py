@@ -6,33 +6,35 @@ from src.main.person import Person
 
 
 class PersonTest(TestCase):
-    def _test(self, method_to_test, value_sets):
+    def _test(self, object_to_test, value_sets):
         for value_set in value_sets:
             # given
-            input_value = value_set[0]
-            expected_calculation = value_set[1]
+            setter_method = value_set[0]
+            getter_method = value_set[1]
+            set_value = value_set[2]
+            expected_value = value_set[3]
+            current_value = getter_method()
+            self.assertNotEqual(current_value, expected_value)
 
             # when
-            actual_calculation = method_to_test(input_value)
-
-            calculation_error_message = '''
-            first_value = {}
-            expected_calculation = {}
-            actual_calculation = {}
-            '''.format(input_value, expected_calculation, actual_calculation)
-
-            return_type_error_message = '''
-            expected return value of `{}` to be of type `str`
-            instead was of type `{}`
-            '''.format(method_to_test.__name__, type(actual_calculation))
+            actual_value = setter_method(set_value)
 
             # then
-            self.assertTrue(isinstance(actual_calculation, str), return_type_error_message)
-            self.assertAlmostEqual(expected_calculation, actual_calculation, calculation_error_message)
+            self.assertEquals(actual_value, expected_value)
+
 
     def test_set_first_name(self):
-        self._test(Person().set_first_name, [
-            ("Leon", "Leon"),
-            ("Christopher", "Christopher"),
-            ("Hunter", "Hunter"),
+        person = Person()
+        self._test(person, [
+            (person.set_first_name, person.get_first_name, "Leon", "Leon"),
+            (person.set_first_name, person.get_first_name, "Christopher", "Christopher"),
+            (person.set_first_name, person.get_first_name, "Hunter", "Hunter"),
+        ])
+
+    def test_set_last_name(self):
+        person = Person()
+        self._test(person, [
+            (person.set_last_name, person.get_last_name, "Leon", "Leon"),
+            (person.set_last_name, person.get_last_name, "Christopher", "Christopher"),
+            (person.set_last_name, person.get_last_name, "Hunter", "Hunter"),
         ])
