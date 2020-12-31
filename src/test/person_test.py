@@ -1,5 +1,4 @@
 # Created by Leon Hunter at 11:23 AM 10/24/2020
-from numbers import Number
 from unittest import TestCase
 
 from src.main.person import Person
